@@ -1,15 +1,34 @@
-import express, { json } from 'express'
-import { corsMiddleware } from './middlewares/cors.js'
-import { PeliculasRouter } from './routes/peliculas.js'
+const express = require('express')
+const crypto = require('node:crypto')
+const cors = require('cors')
+const movies = require('../movies/movies.json')
+const { validarPelicula, validarParcialmentePelicula } = require('../esquemas/pelicula_')
 
 const app = express()
-app.use(json())
-app.use(corsMiddleware())
+app.use(express.json())
+app.use(cors({
+  origin: (origin, callback) => {
+    const ACCEPTED_ORIGINS = [
+      'http://localhost:8080',
+      'http://localhost:1234',
+      'https://movies.com',
+      'https://midu.dev'
+    ]
+
+    if (ACCEPTED_ORIGINS.includes(origin)) {
+      return callback(null, true)
+    }
+
+    if (!origin) {
+      return callback(null, true)
+    }
+
+    return callback(new Error('Not allowed by CORS'))
+  }
+}))
+
 app.disable('x-powered-by')
 
-app.use('/peliculas', PeliculasRouter)
-
-/*
 app.get('/peliculas', (req, res) => {
   const { genre } = req.query
   if (genre) {
@@ -38,7 +57,7 @@ app.post('/peliculas', (req, res) => {
   }
   // esto no es REST porque esta guardando en memoria el estado de la aplicacion
   const nuevaPelicula = {
-    id: randomUUID(),
+    id: crypto.randomUUID(),
     ...resultado.data
   }
   movies.push(nuevaPelicula)
@@ -67,7 +86,7 @@ app.patch('/peliculas/:id', (req, res) => {
   movies[indicePelicula] = peliculaActualizada
   return res.status(201).json(peliculaActualizada) // actualizar la cache del cliente
 })
-*/
+
 // app.get('/peliculas/:genre')
 
 const PORT = process.env.PORT ?? 1234

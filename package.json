@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev:1": "nodemon ./apinodenativo/index.js",
     "dev:2": "node --watch index.js",
