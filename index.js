@@ -1,13 +1,21 @@
 import express, { json } from 'express'
 import { corsMiddleware } from './middlewares/cors.js'
-import { PeliculasRouter } from './routes/peliculas.js'
+import { crearPeliculaRouter } from './routes/peliculas.js'
 
-const app = express()
-app.use(json())
-app.use(corsMiddleware())
-app.disable('x-powered-by')
+export const createApp = ({ peliculaModelo }) => {
+  const app = express()
+  app.use(json())
+  app.use(corsMiddleware())
+  app.disable('x-powered-by')
 
-app.use('/peliculas', PeliculasRouter)
+  app.use('/peliculas', crearPeliculaRouter({ peliculaModelo }))
+
+  const PORT = process.env.PORT ?? 1234
+
+  app.listen(PORT, () => {
+    console.log('escuchando desde el puerto ' + PORT)
+  })
+}
 
 /*
 app.get('/peliculas', (req, res) => {
@@ -69,8 +77,3 @@ app.patch('/peliculas/:id', (req, res) => {
 })
 */
 // app.get('/peliculas/:genre')
-
-const PORT = process.env.PORT ?? 1234
-app.listen(PORT, () => {
-  console.log('escuchando desde el puerto ' + PORT)
-})

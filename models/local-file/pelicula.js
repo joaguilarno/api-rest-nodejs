@@ -1,4 +1,4 @@
-import { readJSON } from '../utils/utils.js'
+import { readJSON } from '../../utils/utils.js'
 import { randomUUID } from 'node:crypto'
 /*
 validacion de integridad y coherencia y consistencia de datos
@@ -67,6 +67,7 @@ export class PeliculaModelo {
 
   static async patch ({ id, input }) {
     const indicePelicula = movies.findIndex(pelicula => pelicula.id === id)
+
     if (indicePelicula === -1) return false
 
     const peliculaActualizada = {
