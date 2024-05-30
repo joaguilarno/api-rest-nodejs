@@ -1,6 +1,7 @@
 import express, { json } from 'express'
 import { corsMiddleware } from './middlewares/cors.js'
 import { crearPeliculaRouter } from './routes/peliculas.js'
+import 'dotenv/config'
 
 export const createApp = ({ peliculaModelo }) => {
   const app = express()
